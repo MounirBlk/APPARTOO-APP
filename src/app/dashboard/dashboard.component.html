@@ -1,0 +1,38 @@
+<div>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>APPARTOO PANGOLIN</mat-card-title>
+            <mat-card-subtitle>DASHBOARD</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <br />
+            <span>Email: {{pangolin.email}}</span><br />
+            <span>Name: {{pangolin.name}}</span><br />
+            <span>Civilite: {{pangolin.civilite}}</span><br />
+            <span>Role: {{pangolin.role}}</span><br />
+            <span>Ami: {{pangolin.ami ? pangolin.ami.name ? pangolin.ami.name : 'Veuillez mettre à jour les informations' : 'Aucun ami enregistré' }}</span>
+            <button *ngIf="pangolin.ami && pangolin.ami.name" mat-raised-button color="primary" (click)="deleteAmi()" style="margin-left: 3em;">Supprimer l'ami {{pangolin.ami.name}} et mettre à jour</button>
+            <br />
+            <br />
+            <mat-form-field appearance="fill" class="example-full-width" style="margin-right: 3em;">
+                <mat-label>Modifier le role</mat-label>
+                <mat-select [(ngModel)]="pangolin.role">
+                    <mat-option *ngFor="let role of roleTypesTab" [value]="role">
+                        {{role}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="example-full-width">
+                <mat-label>Liste de Pangolins</mat-label>
+                <mat-select [(ngModel)]="pangolin.ami">
+                    <mat-option *ngFor="let p of pangolins" [value]="p._id">
+                        {{p.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions align="start">
+            <button mat-raised-button color="primary" (click)="updatePangolin()" style="margin-left: 1em;">Mettre à jour</button>
+        </mat-card-actions>
+    </mat-card>
+</div>

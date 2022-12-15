@@ -1,0 +1,25 @@
+<div>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>APPARTOO PANGOLIN</mat-card-title>
+            <mat-card-subtitle>AUTHENTIFICATION</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <form class="example-form">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Email</mat-label>
+                    <input name="email" [(ngModel)]="auth.email" type="text" matInput placeholder="Email">
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>Password</mat-label>
+                    <input name="password" [(ngModel)]="auth.password" type="password" matInput placeholder="Password">
+                </mat-form-field>
+            </form>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-raised-button color="primary" (click)="inscription()" style="margin-right: 1em;">Inscription</button>
+            <button mat-raised-button color="primary" (click)="login()">Login</button>
+        </mat-card-actions>
+    </mat-card>
+</div>
