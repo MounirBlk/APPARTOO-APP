@@ -1,9 +1,8 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-<router-outlet></router-outlet>
+<mat-toolbar color="primary">
+    <span>APPARTOO PANGOLIN APP</span>
+    <span class="example-spacer"></span>
+    <button mat-raised-button (click)="deconnexion()" style="margin-right: 1em;">Deconnexion</button>
+</mat-toolbar>
+<div style="padding: 3em 3em 3em 3em">
+    <router-outlet></router-outlet>
+</div>
