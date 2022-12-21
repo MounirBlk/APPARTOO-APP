@@ -1,7 +1,7 @@
 import { civiliteTypes, roleTypes } from "../types";
 
 export interface PangolinInterface {
-  _id: string;
+  _id: string | null;
   email: string;//
   password?: string;//
   name: string;//

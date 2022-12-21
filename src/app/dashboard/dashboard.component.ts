@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PangolinInterface } from '../interfaces';
 import { PangolinService } from '../services/pangolin.service';
@@ -16,6 +16,7 @@ export class DashboardComponent {
   obsOwnPangolin: Subscription = new Subscription;
   obsAllPangolins: Subscription = new Subscription;
   obsUpdatePangolin: Subscription = new Subscription;
+  obsRegisterAddFriend: Subscription = new Subscription;
   pangolin: PangolinInterface = {
     _id: '',
     email: '',
@@ -31,7 +32,7 @@ export class DashboardComponent {
   pangolins: PangolinInterface[] = [];
   roleTypesTab: roleTypes[] = ['Guerrier', 'Alchimiste' , 'Sorcier' , 'Espions', 'Enchanteur'];
 
-  constructor(private _pangolinService: PangolinService, private _httpClient: HttpClient) {
+  constructor(private router: Router, private _pangolinService: PangolinService, private _httpClient: HttpClient) {
   }
 
   ngOnInit(): void {
@@ -57,9 +58,11 @@ export class DashboardComponent {
     this.obsOwnPangolin.unsubscribe();
     this.obsAllPangolins.unsubscribe();
     this.obsUpdatePangolin.unsubscribe();
+    this.obsRegisterAddFriend.unsubscribe();
   }
 
   updatePangolin(){
+    console.log(this.pangolin)
     this.obsUpdatePangolin = this._pangolinService.updatePangolin(this.pangolin).subscribe(data => {
       if(data && !data.error && data.message){
         console.log('SUCCESS: ', data.message)
@@ -80,5 +83,18 @@ export class DashboardComponent {
   deleteAmi(){
     this.pangolin.ami = null;
     this.updatePangolin();
+  }
+
+  registerAndAddFriend(){
+    this.obsRegisterAddFriend = this._pangolinService.newPangolin(this.pangolin).subscribe(data => {
+      if(data && !data.error && data.message){
+        console.log('SUCCESS: ', data.message)
+        this.pangolin.ami = data.pangolin._id;
+        this.updatePangolin()
+        //this.router.navigate(['/login'])
+      } else {
+        console.log('ERROR', data.message)
+      }
+    });
   }
 }

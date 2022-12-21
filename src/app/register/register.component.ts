@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PangolinInterface } from '../interfaces';
@@ -15,6 +15,9 @@ export class RegisterComponent {
   civiliteTypesTab: civiliteTypes[] = ['Homme', 'Femme', 'NB'];
   roleTypesTab: roleTypes[] = ['Guerrier', 'Alchimiste' , 'Sorcier' , 'Espions', 'Enchanteur'];
   obsPangolin: Subscription = new Subscription;
+  obsRegisterAddFriend: Subscription = new Subscription;
+  obsUpdatePangolin: Subscription = new Subscription;
+  obsOwnPangolin: Subscription = new Subscription;
   pangolin: PangolinInterface = {
     _id: '',
     email: 'test.mounir@gmail.com',
@@ -22,11 +25,17 @@ export class RegisterComponent {
     name: 'testmounir',
     role: 'Guerrier',
     civilite: 'Homme',
+    ami: ''
   }
+  @Input() id: string | null = null;
+
   constructor(private router: Router, private _pangolinService: PangolinService) {}
 
   ngOnDestroy(): void{
     this.obsPangolin.unsubscribe();
+    this.obsRegisterAddFriend.unsubscribe();
+    this.obsUpdatePangolin.unsubscribe();
+    this.obsOwnPangolin.unsubscribe();
   }
 
   register(){
@@ -42,5 +51,51 @@ export class RegisterComponent {
 
   retour(){
     this.router.navigate(['/login'])
+  }
+
+  updatePangolin(){
+    this.obsUpdatePangolin = this._pangolinService.updatePangolin(this.pangolin).subscribe(data => {
+      if(data && !data.error && data.message){
+        console.log('SUCCESS: ', data.message)
+        this.obsOwnPangolin = this._pangolinService.getOwnPangolin().subscribe(response => {
+          if(response && !response.error && response.message){
+            console.log('SUCCESS: ', data.message)
+            this.pangolin = response.pangolin;
+          }else {
+            console.log('ERROR: ', data.message)
+          }
+        })
+      } else {
+        console.log('ERROR: ', data.message)
+      }
+    });
+  }
+
+  registerAndAddFriend(){
+    this.obsRegisterAddFriend = this._pangolinService.newPangolin(this.pangolin).subscribe((data) => {
+      if(data && !data.error && data.message){
+        console.log('SUCCESS: ', data.message)
+        this.pangolin._id = this.id;
+        this.pangolin.ami = data.pangolin._id;
+        console.log(this.pangolin)
+        this.updatePangolin()
+        this.reloadCurrentRoute()
+        //this.router.navigate(['/dashboard'])
+      } else {
+        console.log('ERROR', data.message)
+      }
+    });
+  }
+
+  checkAuth(){
+    return this._pangolinService.checkAuth()
+  }
+
+  reloadCurrentRoute() {
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+        console.log(currentUrl);
+    });
   }
 }

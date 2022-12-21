@@ -41,7 +41,8 @@
         </mat-card-content>
         <mat-card-actions align="end">
             <button mat-raised-button color="primary" (click)="retour()" style="margin-right: 1em;">Retour</button>
-            <button mat-raised-button color="primary" (click)="register()">Inscription</button>
+            <button mat-raised-button color="primary" (click)="register()" style="margin-right: 1em;">Inscription</button>
+            <button *ngIf="checkAuth()" mat-raised-button color="primary" (click)="registerAndAddFriend()">Inscription et ajout amis</button>
         </mat-card-actions>
     </mat-card>
 </div>
