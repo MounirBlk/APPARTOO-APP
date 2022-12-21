@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { PangolinInterface } from '../interfaces';
 import { PangolinService } from '../services/pangolin.service';
 import { roleTypes } from '../types';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -61,19 +62,28 @@ export class DashboardComponent {
     this.obsRegisterAddFriend.unsubscribe();
   }
 
+  reloadData(value: string){
+    this.pangolin = JSON.parse(value)
+    console.log(true, this.pangolin)
+  }
+
+  getOwnPangolin(){
+    return this._pangolinService.getOwnPangolin().subscribe(response => {
+      if(response && !response.error && response.message){
+        console.log('SUCCESS: ', response.message)
+        console.log(true, response.pangolin)
+        this.pangolin = response.pangolin;
+      }else {
+        console.log('ERROR: ', response.message)
+      }
+    })
+  }
+
   updatePangolin(){
-    console.log(this.pangolin)
     this.obsUpdatePangolin = this._pangolinService.updatePangolin(this.pangolin).subscribe(data => {
       if(data && !data.error && data.message){
         console.log('SUCCESS: ', data.message)
-        this.obsOwnPangolin = this._pangolinService.getOwnPangolin().subscribe(response => {
-          if(response && !response.error && response.message){
-            console.log('SUCCESS: ', data.message)
-            this.pangolin = response.pangolin;
-          }else {
-            console.log('ERROR: ', data.message)
-          }
-        })
+        this.obsOwnPangolin = this.getOwnPangolin()
       } else {
         console.log('ERROR: ', data.message)
       }

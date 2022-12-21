@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PangolinInterface } from '../interfaces';
@@ -28,6 +28,7 @@ export class RegisterComponent {
     ami: ''
   }
   @Input() id: string | null = null;
+  @Output() newItemEvent = new EventEmitter<string>();
 
   constructor(private router: Router, private _pangolinService: PangolinService) {}
 
@@ -59,10 +60,11 @@ export class RegisterComponent {
         console.log('SUCCESS: ', data.message)
         this.obsOwnPangolin = this._pangolinService.getOwnPangolin().subscribe(response => {
           if(response && !response.error && response.message){
-            console.log('SUCCESS: ', data.message)
+            console.log('SUCCESS: ', response.message)
             this.pangolin = response.pangolin;
+            this.newItemEvent.emit(JSON.stringify(this.pangolin));
           }else {
-            console.log('ERROR: ', data.message)
+            console.log('ERROR: ', response.message)
           }
         })
       } else {
@@ -77,9 +79,9 @@ export class RegisterComponent {
         console.log('SUCCESS: ', data.message)
         this.pangolin._id = this.id;
         this.pangolin.ami = data.pangolin._id;
-        console.log(this.pangolin)
         this.updatePangolin()
-        this.reloadCurrentRoute()
+        console.log( this.pangolin)
+        //this.reloadCurrentRoute()
         //this.router.navigate(['/dashboard'])
       } else {
         console.log('ERROR', data.message)
