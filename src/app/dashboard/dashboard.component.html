@@ -30,9 +30,24 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
+            <br />
         </mat-card-content>
         <mat-card-actions align="start">
             <button mat-raised-button color="primary" (click)="updatePangolin()" style="margin-left: 1em;">Mettre à jour</button>
         </mat-card-actions>
+    </mat-card>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>APPARTOO PANGOLIN</mat-card-title>
+            <mat-card-subtitle>Register and ajout amis</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <br />
+            <app-register [id]="pangolin._id"></app-register>
+            <br />
+        </mat-card-content>
+        <!--<mat-card-actions align="start">
+            <button mat-raised-button color="primary" (click)="registerAndAddFriend()">Inscription et ajout amis</button>
+        </mat-card-actions>-->
     </mat-card>
 </div>
